@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_admin.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{adminController.check_type}"></f:event>   
+        </f:metadata>
+
+        <style type="text/css">
+            .wait {
+                background-color: rgb(255, 220, 93) !important;
+
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card centerText"  >
+                    <p:panel header="Register new Farmer" styleClass="panel-login" style="margin-bottom:10px" >
+                        <h:form id="grid">
+
+                            <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                                <p:autoUpdate />
+                            </p:messages>
+
+                            <div class="ui-g-12" style="padding-top:35px;">
+                                <p:inputText id='firstName' placeholder="First Name" value="#{adminAddUserController.first_name}" style="width:60%" required="true" requiredMessage="First name is required."/>
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:inputText id='lastName' placeholder="Last Name" value="#{adminAddUserController.last_name}" style="width:60%" required="true" requiredMessage="Last name is required."/>
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:inputText id='username' placeholder="Username" value="#{adminAddUserController.username}" style="width:60%" required="true" requiredMessage="Username is required."/>
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:password id='pass1' placeholder="Password 1" value="#{adminAddUserController.password}" promptLabel="Password should contain atleast 7 characters, 1 uppercase letter, 1 digit and 1 special character and must start with a letter." match="pass2" validatorMessage="Password 1 should match password 2." style="width:60%" feedback="true"  required="true" requiredMessage="Password is required." alt="first name"/>
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:password  id= 'pass2' placeholder="Password 2" value="#{adminAddUserController.confirmPassword}" style="width:60%" required="true" requiredMessage="You must confirm the password."/>
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px; " >
+                                <p:outputLabel for='button' value="Date of Birth" style="color: #8e8e8e; margin-right: 20px;"/>
+                                <p:calendar id='button'   navigator='true' pattern='dd/MM/yyyy' value="#{adminAddUserController.date_of_birth}"  yearRange="c-100:c+0" showOn="button" required="true" requiredMessage="Date of birth is required." />
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:inputText id='placeOfBirth' placeholder="Place Of Birth" value="#{adminAddUserController.place_of_birth}" style="width:60%" required="true" requiredMessage="Place of birth is required." />
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:inputText id='contactNumber' placeholder="Phone Number" value="#{adminAddUserController.contact_number}" style="width:60%"  required="true" requiredMessage="Contact number is required."/>
+                            </div>
+                            <div class="ui-g-12" style="padding-top:10px;">
+                                <p:inputText id='email' value="#{adminAddUserController.email}" placeholder="E-mail" style="width:60%" required="true" requiredMessage="E-mail is required." />
+                            </div>
+
+
+                            <div class="ui-g-2"></div>
+                            <div class="ui-g-8 ">
+
+                            </div>
+                            <div class="ui-g-2"></div>                        
+
+
+                            <p:commandButton  id="loginButton"  value="Add Farmer" update="firstName lastName pass1 pass2 username button placeOfBirth contactNumber email" action="#{adminAddUserController.register_farmer}" >
+
+                            </p:commandButton>
+                        </h:form>
+
+                    </p:panel>
+
+                </div>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

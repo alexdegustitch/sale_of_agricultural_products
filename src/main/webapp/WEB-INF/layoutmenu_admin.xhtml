@@ -1,0 +1,22 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pi="http://primefaces.org/icarus">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <h:form id="menuform">
+
+        <pi:menu widgetVar="menu">
+            <p:menuitem id="requests" value="Registration Requests" icon="far fa-address-card" outcome="/admin"/>
+            <p:menuitem id="users" value="Users" icon="fas fa-users" outcome="/admin_all_users"/>
+            <p:menuitem id="add_new_user" value="Add New User" icon="fas fa-user-plus" outcome="/admin_add_user"/>
+            <p:menuitem id="change_password" value="Change Password" icon="fas fa-key" outcome="/change_password_admin"/>
+            <p:menuitem id="logout" value="Logout" icon="far fa-window-close" action="#{loginController.logout('a')}"/>
+        </pi:menu>
+
+    </h:form>
+
+</ui:composition>

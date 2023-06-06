@@ -1,0 +1,133 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_farmer.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{nurseryController.init}" ></f:event>
+        </f:metadata>
+        <style type="text/css">
+
+            .ui-scrollpanel-content {
+                padding-left: 0px !important;
+                right: 13px;
+                text-align: center;
+            }
+
+            .ui-dashboard{
+
+                text-align: center;
+                align-content: center;
+
+                margin: auto !important;
+            }
+
+            .ui-dashboard-column{
+                padding-bottom: 0px;
+            }
+            #basic_content{
+                padding: 0;
+            }
+            #basic_footer{
+                margin: 0;
+            }  
+
+            .ui-panel .ui-panel-content{
+                padding: 0px;
+            }
+
+            .ui-button.ui-state-hover, .ui-button.ui-state-active{
+                color: black;
+            }
+
+
+
+        </style>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card centerText">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="ui-g-4">
+                                <h:form>
+                                    <p:growl id="growl" sticky="true" showDetail="true"/>
+
+                                    <h:outputLabel for="@next" value="Amount of Water: " />
+                                    <p:spinner id="water" size="3" value="#{nurseryController.water}" onkeypress="return false" min="0">
+                                        <p:ajax process="@this" listener="#{nurseryController.update_nursery('w')}" />
+                                    </p:spinner>
+                                </h:form>
+                            </div>
+                            <div class="ui-g-4">
+                                <h1 class="lightBlack">Nursery "#{user_nursery.name}" <i class="fas fa-seedling"> <i class="pi pi-check"></i></i> </h1>
+                            </div>
+                            <div class="ui-g-4">
+                                <h:form>
+
+
+                                    <h:outputLabel for="@next" value="Temperature: " />
+                                    <p:spinner id="temp" size="4" value="#{nurseryController.temperature}" onkeypress="return false" stepFactor="0.5">
+                                        <p:ajax process="@this" listener="#{nurseryController.update_nursery('t')}"/>
+                                    </p:spinner>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="ui-g">
+                        <div class="ui-g-12" style="text-align: center;">
+                            <h:form id='form_id'>
+                                <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                                    <p:autoUpdate/>
+                                </p:messages>
+                                <p:scrollPanel id="scroll" class="centerText" widgetVar="scroll" style="border:none;" >
+                                    <p:dashboard id="board"   model="#{nurseryController.model}">
+
+                                    </p:dashboard>
+
+                                </p:scrollPanel>
+
+
+
+                                <div style="clear:both" />
+
+
+                            </h:form>
+
+
+                        </div>
+                    </div>
+                    <div class='ui-g'>
+                        <div class='ui-g-12' style='text-align: center;'>
+                            <h:form>
+                                <p:button value="View Warehouse" outcome="storage_nursery"></p:button>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+
+            window.addEventListener('resize', function () {
+                PF('scroll').redraw();
+            }, true);
+
+            function onShowOverlayPanel(ovr) {
+                ovr.jq.on("mouseleave", function (e) {
+                    ovr.jq.hide();
+                });
+            }
+        </script>
+    </ui:define>
+
+</ui:composition>

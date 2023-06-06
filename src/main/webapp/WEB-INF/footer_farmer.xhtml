@@ -1,0 +1,21 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <div class="footer">
+        <h:graphicImage id="footer-logo" name="images/farm_and_more_logo.jpg" library="icarus-layout" style="height:50px"/>
+        <p>Farm&amp;More</p>
+        
+        <div class="copyright">
+            
+            <p> All rights reserved.</p>
+
+        </div>
+        <div class="copyright">
+            <p style="display: block;"><p:staticMessage severity="warn" summary="WARN!" detail="#{managerBean.message}!" rendered="#{managerBean.message!=null}" style="color:black;"/></p>
+        </div>
+    </div>
+
+</ui:composition>

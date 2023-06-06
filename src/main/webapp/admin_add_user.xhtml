@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_admin.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{adminController.check_type}"></f:event>   
+        </f:metadata>
+        
+        <style type="text/css">
+            .wait {
+                background-color: rgb(255, 220, 93) !important;
+
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card centerText"  >
+
+                    <div id="landing-page-wrapper">
+                        <div id="landing-feature">
+                            <div class="landing-container" >
+                               
+                                <p:button style="display: none" disabled="true"></p:button>
+                                <div class="ui-g">
+                                    <div class="ui-g-6 ui-sm-12 ui-md-6 ui-lg-6 centerText"  style="background-color: #F8F8F8; width: calc(50% - 0.4em);  margin-right: 0.4em; border: 2px solid #F8F8F8; border-radius: 25px;">
+                                        <p:link outcome="admin_add_farmer"><i class="fas fa-tractor fa-feature-registration" aria-hidden="true"></i></p:link>
+                                        <h2>Add Farmer</h2>
+                                        
+                                    </div>
+                                    <div class="ui-g-6 ui-sm-12 ui-md-6 ui-lg-6 centerText" style="background-color: #F8F8F8; width: calc(50% - 0.4em);  margin-left: 0.4em; border: 2px solid #F8F8F8; border-radius: 25px;">
+                                        <p:link outcome="admin_add_company"><i class="far fa-building fa-feature-registration" aria-hidden="true"></i></p:link>
+                                        <h2>Add Company</h2>
+                                        
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

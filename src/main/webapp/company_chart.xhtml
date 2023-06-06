@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_company.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{companyChartController.create_bar_chart}"></f:event>   
+        </f:metadata>
+        <style type="text/css">
+            .label {
+                width:20%;
+                padding:4px;
+            }
+
+            .value {
+                width:80%;
+                padding:4px;
+            }
+
+            .grid {
+                width:100%;
+            }
+
+            .error {
+                color: red;
+            }
+
+            .outputLabel {
+                font-weight: bold;
+            }
+
+            .grid {
+                width:33%;
+                padding:4px;
+            }
+
+            .text_class{
+                font-size: 20px;
+                margin: 0px !important;
+            }
+
+
+
+        </style>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            function start() {
+                PF('statusDialog').show();
+            }
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+            //]]>
+        </script>  
+
+        <div class="ui-g">
+            <div class="ui-g-3"></div>
+            <div class="ui-g-6">
+                <h:form>
+                    <h:commandButton id="pdfButton" value="Download PDF Report" action="#{companyChartController.create_pdf()}" style="margin: 25px 0;
+                                     color: white;
+                                     border-radius: 10px;
+                                     border-style: none;
+                                     background-color: #ea9624;
+                                     font-weight: bold;
+                                     ">
+                    </h:commandButton>
+                </h:form>
+
+
+
+            </div>
+            <div class="ui-g-3">
+
+            </div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-3"></div>
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+                    <p:barChart model="#{companyChartController.barModel}" style="width: 100%; height: 500px;"/>
+                </div>
+            </div>
+            <div class="ui-g-3"></div>
+        </div>
+    </ui:define>
+
+
+</ui:composition>

@@ -1,0 +1,180 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_admin.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <ui:define name="content">
+      
+        <style type="text/css">
+
+            .ui-panelgrid .ui-widget .ui-noborder{
+                margin-top: 30px;
+            }
+
+            .ui-outputpanel .ui-widget .card .centerText{
+                padding: 15px !important;
+            }
+        </style>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-2">
+
+                </div>
+                <div class="ui-g-8">
+                    <div class="card centerText">
+                        <div class="ui-g">
+                            <div class='ui-g-12'>
+                                <h:form>
+                                    <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                                        <p:autoUpdate />
+                                    </p:messages>
+                                    <div class='ui-g-12 ui-md-6 ui-lg-6'>
+                                        <p:outputPanel style="display: block;">
+                                            
+                                            <h:graphicImage name="images/user.png" library="icarus-layout" width="250px" height="250px"/>
+                                        </p:outputPanel>
+                                    </div>
+                                    <div class='ui-g-12 ui-md-6 ui-lg-6'>
+                                        <p:outputPanel style="display: block;">
+                                            <p:panelGrid  styleClass="ui-noborder" style="margin-top:50px;">
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="First Name: " />
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-bottom: 5px;">
+                                                        <p:inplace editor="true" >
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.current_farmer.first_name}"/>
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="Last Name: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <p:inplace editor="true">
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.current_farmer.last_name}" />
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="Username: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <h:outputText value="#{adminController.current_farmer.username}" style="font-weight: bold;"/>
+                                                    </p:column>
+
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="Password: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <p:inplace editor="true">
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.current_farmer.password}" />
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="Date of Birth: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <p:inplace editor="true">
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.date_format}" />
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="Place of Birth: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <p:inplace editor="true">
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.current_farmer.place_of_birth}" />
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="Phone Number: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <p:inplace editor="true">
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.current_farmer.contact_phone}" />
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;">
+                                                        <h:outputText value="E-mail: "/>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;">
+                                                        <p:inplace editor="true">
+                                                            <p:ajax event="save" listener="#{adminController.save_changes('F')}" update="@form" />
+                                                            <h:inputText value="#{adminController.current_farmer.email}" />
+                                                        </p:inplace>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+                                        </p:outputPanel>
+
+                                        <p:outputPanel style="display: block;">
+                                            <p:panelGrid  styleClass="ui-noborder" style="margin-top:10px; width: 100%;">
+
+                                                <p:row >
+
+                                                    <p:column colspan="2" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+
+                                                        <p:commandButton  value='Delete Farmer' action="#{adminController.delete('F')}">
+                                                            
+                                                        </p:commandButton>
+
+                                                    </p:column>
+
+                                                </p:row>
+                                            </p:panelGrid>
+                                        </p:outputPanel>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="ui-g-2">
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

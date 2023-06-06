@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_admin.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{adminController.get_all_confirmed_users}"></f:event>   
+        </f:metadata>
+        <style type="text/css">
+            .wait {
+                background-color: rgb(255, 220, 93) !important;
+
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+
+                    <h:form id="form_company">
+                        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+
+                        <p:dataTable id="basicDT" var="company" value="#{adminController.confirmed_companies}">
+                            <f:facet name="header">
+                                All Companies
+                            </f:facet>
+                            <p:column headerText="Company's Short Name" sortBy="#{company.short_name}">
+                                <h:outputText value="#{company.short_name}" />
+                            </p:column>
+                            <p:column headerText="Company Address" sortBy="#{company.place_of_the_company}">
+                                <h:outputText value="#{company.place_of_the_company}" />
+                            </p:column>
+                            <p:column style="text-align: center">
+                                <p:commandButton icon="fas fa-building" title="View Company's Profile" action="#{adminController.get_company(company.short_name)}">
+
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+
+                </div>
+            </div>
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+                    <h:form id="form_farmer">
+                        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+
+                        <p:dataTable id="basicDT" var="farmer" value="#{adminController.confirmed_farmers}">
+                            <f:facet name="header">
+                                All Farmers
+                            </f:facet>
+                            <p:column headerText="Farmer's Username" sortBy="#{farmer.username}">
+                                <h:outputText value="#{farmer.username}" />
+                            </p:column>
+                            <p:column headerText="Farmer's Place of Birth" sortBy="#{farmer.place_of_birth}">
+                                <h:outputText value="#{farmer.place_of_birth}" />
+                            </p:column>
+                            <p:column style="text-align: center">
+                                <p:commandButton icon="fas fa-user" title="View Farmer's Profile" action="#{adminController.get_farmer(farmer.username)}">
+
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_company.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{companyController.get_all_orders_for_company(company.short_name)}"></f:event>   
+        </f:metadata>
+        <style type="text/css">
+            .wait {
+                background-color: rgb(255, 220, 93) !important;
+
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card centerText"  >
+                    <h1 class="lightBlack">All Orders <i class="fas fa-shipping-fast"></i> </h1>
+
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:outputPanel layout="block" id="datatable_overlay">
+                                <h:form id="form">
+                                    <p:dataTable id="orders_table" var="item" value="#{companyController.items}" rendered="#{companyController.items.size() > 0}" rowStyleClass="#{item.status == 'w' ? 'wait' : null}">
+
+                                        <p:column headerText="Farmer's username" >
+                                            <h:outputText value="#{item.farmer_username}" />
+                                        </p:column>
+                                        <p:column headerText="Order Date" sortBy="#{item.date_of_order}">
+                                            <h:outputText value="#{item.date_of_order.dayOfMonth}-#{item.date_of_order.monthValue}-#{item.date_of_order.year} #{item.date_of_order.toLocalTime()}" />
+                                        </p:column>
+
+                                        <p:column headerText="Order Price" sortBy="#{item.price}">
+                                            <h:outputText value="0.0" rendered="#{item.status == 'c'}" />
+                                            <h:outputText value="#{item.price}" rendered="#{(item.status != 'g' and item.price > 0)}" />
+                                            <h:outputText value="FREE" rendered="#{item.status == 'g' or (item.status == 'a' and item.price == 0)}" />
+                                        </p:column>
+                                        <p:column headerText="Order Status" sortBy="#{item.status}">
+                                            <h:outputText value="ARRIVED" rendered="#{item.status == 'a' and item.price > 0}"/>
+                                            <h:outputText value="SENT" rendered="#{item.status == 's'}"/>
+                                            <h:outputText value="ON HOLD" rendered="#{item.status == 'w'}"/>
+                                            <h:outputText value="DECLINED" rendered="#{item.status == 'd'}"/>
+                                            <h:outputText value="CANCELED" rendered="#{item.status == 'c'}"/>
+                                            <h:outputText value="ORDERED" rendered="#{item.status == 'o'}"/>
+                                            <h:outputText value="GIFT" rendered="#{item.status == 'g'}"/>
+                                            <h:outputText value="GIFT-ARRIVED" rendered="#{item.status == 'a' and item.price == 0}"/>
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":form:orderDetail" oncomplete="PF('orderDialog').show()" icon="fas fa-search" title="Items in Order" disabled="#{item.status == 'c'}">
+                                                <p:ajax event="click" listener="#{companyController.get_items_for_order(item.id_order)}"></p:ajax>
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center" rendered="#{item.status == 'o' or item.status=='w'}">
+                                            <p:commandButton value="CONFIRM" >
+                                                <p:ajax update='@form' event='click' listener="#{companyController.accept_order(item.id_order)}"></p:ajax>
+                                            </p:commandButton>
+                                            <p:commandButton value="DECLINE">
+                                                <p:ajax update='@form' event='click' listener="#{companyController.decline_order(item.id_order)}"></p:ajax>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <p:dialog header="Products in the Order" widgetVar="orderDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                        <p:outputPanel id="orderDetail" style="text-align:center;">
+                                            <p:dataView var="i" value="#{companyController.items_in_order}" rendered="#{not empty companyController.items_in_order}" listIcon="fas fa-bars">
+                                                <p:dataViewListItem>
+                                                    <h:panelGrid columns="2" style="width:100%" columnClasses="image,detail">
+                                                        <h:graphicImage name="images/items/item_#{i.id_item}.jpg" library="icarus-layout" width="50px" height="50px"/>
+
+                                                        <p:outputPanel>
+                                                            <h:panelGrid columns="2" cellpadding="5">
+                                                                <h:outputText value="Name:" />
+                                                                <h:outputText value="#{i.item_name}" style="font-weight: bold"/>
+
+                                                                <h:outputText value="Quantity:" />
+                                                                <h:outputText value="#{i.amount}" style="font-weight: bold"/>
+
+                                                                <h:outputText value="Price:" />
+                                                                <h:outputText value="#{i.price}" style="font-weight: bold" rendered="#{i.status != 'g' or item.price > 0}"/>
+                                                                <h:outputText value="FREE" style="font-weight: bold" rendered="#{i.status == 'g' or item.price == 0}"/>
+                                                            </h:panelGrid>
+                                                        </p:outputPanel>
+
+                                                    </h:panelGrid>
+                                                </p:dataViewListItem>
+                                            </p:dataView>
+                                        </p:outputPanel>
+                                    </p:dialog>
+
+                                </h:form>
+                            </p:outputPanel>
+
+                        </div>
+
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:outputLabel id="output_label" rendered="#{companyController.items.size() == 0}"><h2>You don't have any orders!</h2></p:outputLabel>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

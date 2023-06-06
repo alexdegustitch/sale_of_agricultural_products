@@ -1,0 +1,22 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pi="http://primefaces.org/icarus">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <h:form id="menuform">
+
+        <pi:menu widgetVar="menu">
+            <p:menuitem id="my_nurseries" value="My Nurseries" icon="fas fa-warehouse" outcome="/farmer"/>
+            <p:menuitem id="online_shop" value="Online Shop" icon="fas fa-shopping-bag" outcome="/online_shop"/>
+            <p:menuitem id="my_cart" value="My Cart" icon="fas fa-shopping-cart" outcome="/cart"/>
+            <p:menuitem id="change_password" value="Change Password" icon="fas fa-key" outcome="/change_password_farmer"/>
+            <p:menuitem id="logout" value="Logout" icon="far fa-window-close" action="#{loginController.logout('f')}"/>
+        </pi:menu>
+
+    </h:form>
+
+</ui:composition>

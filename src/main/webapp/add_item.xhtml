@@ -1,0 +1,232 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_company.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{addItemController.get_all_seedlings}"></f:event>   
+        </f:metadata>
+        <style type="text/css">
+            .label {
+                width:20%;
+                padding:4px;
+            }
+
+            .value {
+                width:80%;
+                padding:4px;
+            }
+
+            .grid {
+                width:100%;
+            }
+
+            .error {
+                color: red;
+            }
+
+            .outputLabel {
+                font-weight: bold;
+            }
+
+            .grid {
+                width:33%;
+                padding:4px;
+            }
+
+            .text_class{
+                font-size: 20px;
+                margin: 0px !important;
+            }
+
+
+        </style>
+
+        <div class="ui-g">
+            <div class="ui-g-3"></div>
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+                    <h:form id='json_form' enctype="multipart/form-data"> 
+                        <p:messages id="messages" showSummary="false" showDetail="true" closable="true" for='json_file' >
+                            <p:autoUpdate/>
+                        </p:messages>
+                        <h:outputText value="Attach JSON File:  "></h:outputText>
+
+                        <p:fileUpload id='json_file' value="#{addItemController.json_file}" mode="simple" skinSimple="true"/>
+                        <br />
+                        <p:commandButton value="Submit" ajax="false" action="#{addItemController.upload}" />
+                    </h:form>
+                </div>
+            </div>
+            <div class="ui-g-3"></div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-3"></div>
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+                    <h1 class="lightBlack">Add New Product</h1>
+
+                    <h:form id="myForm" enctype="multipart/form-data">
+
+
+                        <p:wizard flowListener="#{addItemController.onFlowProcess}" updateModelOnPrev="true" id="wiz">
+                            <p:tab id="info" title="Info">
+                                <p:panel header="Product's info">
+                                    <p:messages closable="true" for='name days type desc'/>
+                                    <h:panelGrid columns="2" columnClasses="label, value">
+                                        <h:outputText  styleClass="text_class" value="Name: *" />
+                                        <p:inputText id='name' value="#{addItemController.name}" required="true" label="Name" requiredMessage="Name is reuired."/>
+
+                                        <h:outputText styleClass="text_class" value="Days to ripen/Accelerating growth in days: *" />
+                                        <p:inputText id='days' value="#{addItemController.days}" required="true" requiredMessage="Days to ripen/Accelerating growth in days is required." converterMessage="Days to ripen/Accelerating growth in days is required must be a number consisting of one or more digits."/>
+
+                                        <p:outputLabel styleClass="text_class"  for="type" value="Type:" />
+                                        <p:selectOneRadio id="type" value="#{addItemController.type}" unselectable="true" required="true" requiredMessage="You must choose item's type." styleClass="text_class">
+                                            <f:selectItem itemLabel="Seedling" itemValue="S"/>
+                                            <f:selectItem itemLabel="Agent" itemValue="A" />
+                                        </p:selectOneRadio>
+
+                                        <h:outputText styleClass="text_class" value="Description: *" />
+                                        <p:inputTextarea id='desc' value="#{addItemController.description}" required="true" label="Description" rows="10" cols="50" requiredMessage="Description is required."></p:inputTextarea>
+
+
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+
+                            <p:tab id="amount" title="Quantity &amp; Pricing">
+                                <p:panel header="Quantity &amp; Pricing">
+                                    <p:messages closable="true" for='quantity price'/>
+                                    <h:panelGrid columns="2" columnClasses="label, value">
+                                        <h:outputText styleClass="text_class"  value="Quantity: *" />
+                                        <p:inputText id='quantity' value="#{addItemController.amount}" required="true" requiredMessage="Amount is required." converterMessage="Amount must be a number consisting of one or more digits."/>
+
+                                        <h:outputText styleClass="text_class" value="Price: *" />
+                                        <p:inputText id='price' value="#{addItemController.price}" required="true" requiredMessage="Price is required." converterMessage="Price must be a number consisting of one or more digits."/>
+
+
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+
+                            <p:tab id="approved_seedlings" title="Friendly Seedlings">
+                                <p:panel id='panel_friendly' header="Friendly Seednlings">
+                                    <p:messages closable="true"/>
+                                    <h:panelGrid columns="2" columnClasses="label, value">
+                                        <p:outputPanel>
+                                            <h:outputLabel styleClass="text_class" for="grid2" value="Select seedlings: " />
+                                            <br/>
+                                            <br/>
+                                            <h:outputText value="Select all: " />
+                                            <p:toggleSwitch value="#{addItemController.all_selected}" disabled="#{addItemController.type == 'A'}">
+                                                <p:ajax listener="#{addItemController.select_all}" update="panel_friendly" />
+                                            </p:toggleSwitch>
+                                        </p:outputPanel>
+
+                                        <p:selectManyCheckbox id="grid2" value="#{addItemController.chosen_seedlings_id}" layout="responsive" columns="4" style="text-align: center;">
+                                            <f:selectItems value="#{addItemController.seedlings}" var="s" itemLabel="#{s.name}" itemValue="#{s.id_item}" itemDisabled="#{addItemController.type == 'A'}" itemDescription="#{s.company_name}"/>
+                                        </p:selectManyCheckbox>
+
+
+
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+
+                            <p:tab id="confirm" title="Confirmation">
+                                <p:panel header="Confirmation">
+                                    <p:messages closable="true"   for='file_upload'/>
+                                    <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText  value="Name: " />
+                                            <h:outputText value="#{addItemController.name}" styleClass="outputLabel"/>
+
+                                            <h:outputText  value="Days to ripen/Accelerating growth in days:  " />
+                                            <h:outputText value="#{addItemController.days}" styleClass="outputLabel"/>
+
+                                            <h:outputText  value="Type: " />
+
+                                            <h:outputText value="Seedling" styleClass="outputLabel" rendered="#{addItemController.type == 'S'}"/>
+                                            <h:outputText value="Agent" styleClass="outputLabel" rendered="#{addItemController.type == 'A'}"/>
+
+
+
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText value="Quantity: " />
+                                            <h:outputText value="#{addItemController.amount}" styleClass="outputLabel"/>
+
+                                            <h:outputText  value="Price: " />
+                                            <h:outputText value="#{addItemController.price}" styleClass="outputLabel"/>
+
+                                            <h:outputText />
+                                            <h:outputText />
+                                            <h:outputText />
+                                            <h:outputText />
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1">
+
+                                            <p:dataList value="#{addItemController.chosen_seedlings}" var="seed" type="unordered" emptyMessage="No seedlings chosen" rendered="#{addItemController.type=='S'}">
+                                                <f:facet name="header">
+                                                    Friendly Seedlings
+                                                </f:facet>
+                                                <h:outputText value="#{seed.name}" ></h:outputText>
+                                            </p:dataList>
+
+                                            <h:outputText rendered="#{addItemController.type=='A'}"/>
+
+                                            <h:outputText />
+
+                                            <h:outputText />
+
+                                            <h:outputText />
+                                        </h:panelGrid>
+
+                                        <h:outputText  value="Description: "/>
+
+                                        <h:outputText value="#{addItemController.description}" styleClass="outputLabel"/>
+
+                                        <h:outputText />
+
+
+                                        <h:outputText value="Select image: "></h:outputText>
+
+                                        <p:fileUpload id='file_upload' value="#{addItemController.file}" style="text-align: center;" mode="simple" skinSimple="true" required="true" requiredMessage="Image is required." allowTypes="/(\.|\/)(gif|jpe?g|png)$/" invalidFileMessage="This type is not allowed." />
+
+                                        <h:outputText />
+                                    </h:panelGrid>
+
+
+
+                                    <p:commandButton value="Submit" ajax="false" action="#{addItemController.add_item}" />
+
+
+
+
+                                </p:panel>
+
+                            </p:tab>
+                        </p:wizard>
+
+                    </h:form>
+                    <script>
+                        function resetWizard() {
+                            wiz.loadStep(wiz.cfg.steps[0], true);
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="ui-g-3"></div>
+        </div>
+
+    </ui:define>
+
+
+</ui:composition>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title></title>
+    </h:head>
+
+    <h:body styleClass="containerLogin">
+        <style type="text/css">
+            
+
+             
+
+        </style>
+        <p:panel styleClass="panel-login" style="margin-top:20%; border: none;">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card centerText">
+                        <h1 class="lightBlack" style="text-align: center;">Add Seedling for the Planting Hole</h1>
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:outputPanel layout="block" id="datatable_overlay" style="border: none;">
+                                    <h:form>
+                                        <p:dataTable  id='datatable' var="seed" value="#{nurseryController.seedlings}" selectionMode="single" selection="#{nurseryController.selected_seedling}" rowKey="#{seed.id_item}" scrollable="true" scrollHeight="500" reflow="true" style="text-align: center;" rendered="#{nurseryController.seedlings.size()>0}">
+                                            <p:ajax event="rowSelect" process="@form" listener="#{nurseryController.confirm_seedling_for_plot}"/>
+                                            <p:column headerText="Name" sortBy="#{seed.name}" style="text-align: center;">
+                                                <h:outputText value="#{seed.name}" />
+                                            </p:column>
+
+                                            <p:column headerText="Days to ripen" sortBy="#{seed.days}" style="text-align: center;">
+                                                <h:outputText value="#{seed.days}" />
+                                            </p:column>
+
+                                            <p:column headerText="Amount in warehouse" sortBy="#{seed.amount_in_storage}" style="text-align: center;">
+                                                <h:outputText value="#{seed.amount_in_storage}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </h:form>
+                                </p:outputPanel>
+
+                            </div>
+
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:outputLabel id="output_label" rendered="#{nurseryController.seedlings.size()==0}"><h2>You don't have any seedlings!</h2></p:outputLabel>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="icarus-layout" />
+        </p:panel>
+    </h:body>
+
+</html>

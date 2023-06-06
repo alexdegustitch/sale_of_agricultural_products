@@ -1,0 +1,193 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_farmer.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{cartController.get_items_in_cart}" />
+        </f:metadata>
+        <style type="text/css">
+
+            .ui-panelgrid .ui-widget .ui-noborder{
+
+                margin-right: 0px !important;
+            }
+
+            .ui-outputpanel .ui-widget .card .centerText{
+                padding: 15px !important;
+            }
+
+            .ui-widget-content{
+                border: none !important;
+            }
+
+            .ui-widget-header{
+                background: white !important;
+                border: none !important;
+            }
+
+            .ui-datalist .ui-datalist-header.ui-widget-header{
+                background: #4a4a4a !important;
+            }
+
+            .ui-state-default{
+                border: none !important;
+            }
+
+
+            .ui-dataview-list .ui-dataview-row {
+                border-bottom: 1px solid #A8A8A8;
+                padding: 25px 10px;
+                /* with the exported variables from Nova and Luna Themes*/
+                border-bottom-color: var(--input-border-color, #A8A8A8);
+            }
+
+            .logo {
+                width: 5%;
+            }
+            .detail {
+                width: 85%;
+                padding-left: 25px;
+            }
+
+            .ui-dataview-header {
+                display: none !important;
+            }
+        </style>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-3">
+
+                </div>
+                <div class="ui-g-6">
+                    <h:form id='form1'>
+                        <p:autoUpdate/>
+                        <p:outputPanel style="display: block" rendered="#{cartController.current_cart==null}">
+                            <div class="card centerText" style="background-color: #F8F8F8;">
+                                <div class="ui-g">
+                                    <div class='ui-g-12'>
+                                        <div id="landing-page-wrapper">
+                                            <div id="landing-feature" style="padding: 20px;">                                     
+                                                <div class="ui-g-12 ui-sm-12 ui-md-12 ui-lg-12 centerText"  style=" margin-right: 0.4em; border: 2px solid #F8F8F8; border-radius: 25px; margin-bottom: 20px;">
+                                                    <i class="fas fa-shopping-cart fa-feature-registration"  aria-hidden="true"></i>
+
+                                                </div>   
+                                                <h1>You cart is empty</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </h:form>
+                    <h:form id="form2">
+                        <div class='ui-g'>
+
+                            <p:dataView  var="item" value="#{cartController.items_in_cart}"
+                                         rendered="#{cartController.current_cart != null}">
+
+                                <p:dataViewListItem>
+                                    <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail">
+                                        <h:graphicImage name="images/items/item_#{item.id_item}.jpg" library="icarus-layout" width="96px" height="96px"/>
+
+                                        <p:outputPanel>
+                                            <h:panelGrid columns="2" cellpadding="5">
+                                                <h:outputText value="Name: " />
+                                                <h:outputText value="#{item.name}" style="font-weight: bold"/>
+
+                                                <h:outputText value="Company: " />
+                                                <h:outputText value="#{item.company_full_name}" style="font-weight: bold"/>
+
+                                                <h:outputText value="Days to ripen: " rendered="#{item.type == 'S'}"/>
+                                                <h:outputText value="Accelerating growth in days: " rendered="#{item.type == 'A'}"/>
+                                                <h:outputText value="#{item.days}" style="font-weight: bold"/>
+                                            </h:panelGrid>
+                                        </p:outputPanel>
+                                        <p:outputPanel>
+                                            <h:panelGrid columns="3" cellpadding="5">
+                                                <h:outputText value="#{item.amount_in_storage}" style="font-weight: bold; font-size: 15px; width: 100%;"/>
+                                                <h:outputText value=" x " style="font-weight: bold; font-size: 15px;"/>
+                                                <h:outputText value="#{item.price}" style="font-weight: bold; font-size: 15px;"/>
+
+                                                <h:outputText value="" style="font-weight: bold; font-size: 15px;"/>
+                                                <h:outputText value=" = " style="font-weight: bold; font-size: 30px;"/>
+                                                <h:outputText value="#{item.amount_in_storage * item.price} RSD" style="font-weight: bold; font-size: 30px;"/>
+
+                                            </h:panelGrid>
+                                        </p:outputPanel>
+                                        <p:commandButton icon='fas fa-window-close' title="Remove item">
+                                            <p:ajax update='@form form3' event='click' listener="#{cartController.remove_item_from_cart(item.id_item)}"></p:ajax>
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                </p:dataViewListItem>
+
+                            </p:dataView>
+
+
+
+
+                        </div>
+                    </h:form>
+                    <h:form id='form3'>
+                        <p:messages id="messages" for="console" showSummary="false" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+
+
+
+                        <p:outputPanel styleClass="card centerText" style="display: block; background: white;" rendered="#{cartController.current_cart!=null}">
+                            <div class='ui-g'>
+                                <div class="ui-g-12">
+                                    <div class='ui-g-2 ui-sm-12'>
+                                        <br/>
+                                        <p:selectOneMenu id="console" value="#{cartController.id_nursery}" style="width:125px" required="true" requiredMessage="You must select a nursery.">
+
+                                            <p:ajax event="change" update="@this" />
+                                            <f:selectItem itemLabel="Select Nursery" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{cartController.nurseries}" 
+                                                           var="n" itemLabel="#{n.name}" itemValue="#{n.id_garden}" 
+                                                           />
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class='ui-g-6 ui-sm-12' style="text-align: center;">
+
+                                        <p:commandButton id="loginButton" value="Confirm Order" style="margin-bottom: 10px; margin-top: 20px;">
+
+                                            <p:ajax update="form1 form2 form3" event='click' listener="#{cartController.order_order}"></p:ajax>
+                                        </p:commandButton>
+                                    </div>
+
+                                    <div class='ui-g-4 ui-sm-12'>
+
+                                        Total price: <p:outputLabel style="font-weight: bold; font-size: 35px;" value='#{cartController.sum}'></p:outputLabel>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+
+
+
+
+
+
+                    </h:form>
+                    <div class='ui-g'>
+
+                    </div>
+
+                </div>
+
+                <div class="ui-g-3">
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

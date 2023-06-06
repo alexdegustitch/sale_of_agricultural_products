@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_company.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type='preRenderView' listener="#{itemInfoController.get_all_items_for_company(company.short_name)}"></f:event>
+        </f:metadata>
+        <style type="text/css"> 
+            /*demo*/
+            .ui-dataview-list .ui-dataview-row {
+                border-bottom: 1px solid #A8A8A8;
+                padding: 25px 10px;
+                /* with the exported variables from Nova and Luna Themes*/
+                border-bottom-color: var(--input-border-color, #A8A8A8);
+            }
+
+            .logo {
+                width: 5%;
+            }
+            .detail {
+                width: 85%;
+                padding-left: 25px;
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card centerText">
+                    <h1 class="lightBlack">#{company.full_name}'s products</h1>
+                    <h:form id="form">
+                        <p:dataGrid var="item" value="#{itemInfoController.items}" columns="6" layout="grid"
+                                    rows="18" paginator="true" id="datagrid"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="18,30,48" >
+
+                            <f:facet name="header">
+                                <p:outputPanel style="text-align: left; display: inline; float:left;">
+                                    <p:selectOneButton value="#{itemInfoController.type}">
+                                        <p:ajax event="change" update="@form" listener="#{itemInfoController.reorder_items}" />
+                                        <f:selectItem itemLabel="Seedlings" itemValue="S" />
+                                        <f:selectItem itemLabel="Agents" itemValue="A" />
+                                    </p:selectOneButton>
+                                </p:outputPanel>
+                                <p:outputPanel style="text-align: right; display: inline; float: start;">
+                                    <p:outputLabel for="@next" value="Sort by: " style="margin-top: 20px;" />
+                                    <p:selectOneMenu id="sort" value="#{itemInfoController.sort}" style="width:125px">
+                                        <p:ajax event="change" update="@form" listener="#{itemInfoController.reorder_items}" />
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItem itemLabel="Price Descending" itemValue="pd" />
+                                        <f:selectItem itemLabel="Price Ascending" itemValue="pa" />
+                                        <f:selectItem itemLabel="Mark" itemValue="ma" />
+                                        <f:selectItem itemLabel="Name A-Z" itemValue="az" />
+                                    </p:selectOneMenu>
+                                </p:outputPanel>
+
+                            </f:facet>
+
+                            <p:panel header="#{item.name} (#{item.company_full_name})" style="text-align:center" class='box'>
+                                <h:panelGrid columns="1" style="width:100%; font-size: 24px;">
+                                    <h:graphicImage name="images/items/item_#{item.id_item}.jpg" library="icarus-layout" width="96px" height="96px"/>
+
+                                    <p:outputPanel rendered="#{item.mark > 0}">
+                                        
+                                        <br/>
+                                        <h:outputLabel  value="#{item.mark} " rendered="#{item.mark > 0}" style="font-weight: bold; display: inline;"></h:outputLabel>
+                                        <p:rating value="#{itemInfoController.mark_int}" readonly="true" stars="1" rendered="#{item.mark > 0 }" style="display: inline;"/>
+                                        <br/>
+                                        <br/>
+                                        
+                                    </p:outputPanel>
+                                    <p:outputPanel rendered="#{item.mark == 0}">
+                                        <h:outputLabel for="@next" value="This product hasn't been reviewed yet " rendered="#{item.mark == 0}"></h:outputLabel>
+                                        <p:rating value="#{itemInfoController.mark_int}" readonly="true" stars="1" rendered="#{item.mark == 0 }"/>
+                                    </p:outputPanel>
+                                    <p:outputPanel>
+                                        <p:outputLabel value='In Stock' rendered="#{item.amount > 0 and item.active == 1}" style="color: green"></p:outputLabel>
+                                        <p:outputLabel value='Out of Stock' rendered="#{item.amount == 0 and item.active == 1}" style="color: red"></p:outputLabel>
+                                        <p:outputLabel value='Not Avaiable' rendered="#{item.active == 0}" style="color: red"></p:outputLabel>
+                                    </p:outputPanel>
+
+                                    <p:outputPanel>
+                                        <p:outputLabel value='Price: #{item.price} RSD' ></p:outputLabel>                                    
+                                    </p:outputPanel>
+                                    <p:button value='View Details' icon="fas fa-search" outcome="item_info_company?id=#{item.id_item}"></p:button>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:dataGrid>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

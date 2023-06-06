@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Farm&amp;More</title>
+        <link rel="shortcut icon" href="#{resource['icarus-layout/images/fam_logo_small.png']}"  />
+    </h:head>
+
+    <h:body style="background: -webkit-linear-gradient(125deg, #fbdf86 0%, #f6bb4e 100%);">
+        <div id="landing-page-wrapper">
+            <div id="landing-feature">
+                <div class="landing-container" >
+                    <div class="logo-container">
+                        <h:graphicImage name="images/farm_and_more_logo.jpg" id="PageLogo" library="icarus-layout"/>
+                    </div>
+                    <p:button style="display: none" disabled="true"></p:button>
+                    <div class="ui-g">
+                        <div class="ui-g-6 ui-sm-12 ui-md-6 ui-lg-6 centerText"  style="background-color: #F8F8F8; width: calc(50% - 0.4em);  margin-right: 0.4em; border: 2px solid #F8F8F8; border-radius: 25px;">
+                            <p:link outcome="registration_farmer"><i class="fas fa-tractor fa-feature-registration" aria-hidden="true"></i></p:link>
+                            <h2>Farmer</h2>
+                            <p style="border-color: black;">
+                                Take care of your <br/>
+                                seedlings and supply your <br/>
+                                nursery gardens from home 
+                            </p>
+                        </div>
+                        <div class="ui-g-6 ui-sm-12 ui-md-6 ui-lg-6 centerText" style="background-color: #F8F8F8; width: calc(50% - 0.4em);  margin-left: 0.4em; border: 2px solid #F8F8F8; border-radius: 25px;">
+                            <p:link outcome="registration_company"><i class="far fa-building fa-feature-registration" aria-hidden="true"></i></p:link>
+                            <h2>Company</h2>
+                            <p>
+                                Sell your pesticides, <br/>
+                                fertilizers and more from <br/>
+                                Farm&amp;More online shop 
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="ui-g footer-registration" style="text-align: center">
+                        <div class="ui-g-12">
+                            <span>Farm&amp;More</span>
+                            <br></br>
+                            <span>All rights reserved.</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <style type="text/css">
+            body {
+                overflow-x: hidden;
+            }
+        </style>
+
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="icarus-layout" />
+
+
+
+    </h:body>
+
+</html>

@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_admin.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{adminController.get_all_uncomfirmed_users}"></f:event>   
+        </f:metadata>
+        <style type="text/css">
+            .wait {
+                background-color: rgb(255, 220, 93) !important;
+
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+
+                    <h:form id="form_company">
+                        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+
+                        <p:dataTable id="basicDT" var="company" value="#{adminController.companies}">
+                            <f:facet name="header">
+                                Company's Requests
+                            </f:facet>
+                            <p:column headerText="Company's Short Name" sortBy="#{company.short_name}">
+                                <h:outputText value="#{company.short_name}" />
+                            </p:column>
+                            <p:column headerText="Company Address" sortBy="#{company.place_of_the_company}">
+                                <h:outputText value="#{company.place_of_the_company}" />
+                            </p:column>
+                            <p:column style="text-align: center">
+                                <p:commandButton update=":form_company:companyDetail" oncomplete="PF('companyDialog').show()" icon="fas fa-building" title="Company's Info">
+                                    <p:ajax event="click" listener="#{adminController.find_company(company.short_name)}"></p:ajax>
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="width:25%;text-align: center">
+                                <p:commandButton value="ACCEPT" >
+                                    <p:ajax update='@form' event='click' listener="#{adminController.accept('C', company.short_name)}"></p:ajax>
+                                </p:commandButton>
+                                <p:commandButton value="DECLINE">
+                                    <p:ajax update='@form' event='click' listener="#{adminController.decline('C', company.short_name)}"></p:ajax>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog header="Company's Info" widgetVar="companyDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="companyDetail" style="text-align:center;">
+                                <h:panelGrid id="company_info" columns="2" columnClasses="label,value">
+                                    <h:outputText value="Full Name: " />
+                                    <h:outputText  value="#{adminController.company_info.full_name}" />
+                                    
+                                    <h:outputText value="Short Name: " />
+                                    <h:outputText  value="#{adminController.company_info.short_name}" />
+                                    
+                                    <h:outputText value="Date of Founding: " />
+                                    <h:outputText  value="#{adminController.company_info.date_of_founding}" />
+                                    
+                                    <h:outputText value="Company Address: " />
+                                    <h:outputText  value="#{adminController.company_info.place_of_the_company}" />
+                                    
+                                    <h:outputText value="E-mail: " />
+                                    <h:outputText  value="#{adminController.company_info.email}" />
+                                    
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+
+                </div>
+            </div>
+            <div class="ui-g-6">
+                <div class="card centerText"  >
+                    <h:form id="form_farmer">
+                        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+
+                        <p:dataTable id="basicDT" var="farmer" value="#{adminController.farmers}">
+                            <f:facet name="header">
+                                Farmer's Requests
+                            </f:facet>
+                            <p:column headerText="Farmer's Username" sortBy="#{farmer.username}">
+                                <h:outputText value="#{farmer.username}" />
+                            </p:column>
+                            <p:column headerText="Farmer's Place of Birth" sortBy="#{farmer.place_of_birth}">
+                                <h:outputText value="#{farmer.place_of_birth}" />
+                            </p:column>
+                            <p:column style="text-align: center">
+                                <p:commandButton update=":form_farmer:farmerDetail" oncomplete="PF('farmerDialog').show()" icon="fas fa-user" title="Farmer's Info">
+                                    <p:ajax event="click" listener="#{adminController.find_farmer(farmer.username)}"></p:ajax>
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="width:25%;text-align: center">
+                                <p:commandButton value="ACCEPT" >
+                                    <p:ajax update='@form' event='click' listener="#{adminController.accept('F', farmer.username)}"></p:ajax>
+                                </p:commandButton>
+                                <p:commandButton value="DECLINE">
+                                    <p:ajax update='@form' event='click' listener="#{adminController.decline('F', farmer.username)}"></p:ajax>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog header="Farmer's Info" widgetVar="farmerDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="farmerDetail" style="text-align:center;">
+                                <h:panelGrid id="farmer_info" columns="2" columnClasses="label,value">
+                                    <h:outputText value="First Name: " />
+                                    <h:outputText  value="#{adminController.farmer_info.first_name}" />
+                                    
+                                    <h:outputText value="Last Name: " />
+                                    <h:outputText  value="#{adminController.farmer_info.last_name}" />
+                                    
+                                    <h:outputText value="Username: " />
+                                    <h:outputText  value="#{adminController.farmer_info.username}" />
+                                    
+                                    <h:outputText value="Date of Birth: " />
+                                    <h:outputText  value="#{adminController.farmer_info.date_of_birth}" />
+                                    
+                                    <h:outputText value="Place of Birth: " />
+                                    <h:outputText  value="#{adminController.farmer_info.place_of_birth}" />
+                                    
+                                    <h:outputText value="Phone Number: " />
+                                    <h:outputText  value="#{adminController.farmer_info.contact_phone}" />
+                                    
+                                    <h:outputText value="E-mail: " />
+                                    <h:outputText  value="#{adminController.farmer_info.email}" />
+                                    
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

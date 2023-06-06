@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title style="text-align: center;"></title>
+    </h:head>
+
+    <h:body styleClass="containerLogin">
+        <div class="logo-container">
+            <h:graphicImage name="images/farm_and_more_logo.jpg" id="PageLogo" library="icarus-layout"/>
+        </div>
+        <div >
+            <p:panel header="Add New Nursery" styleClass="panel-login" style="margin-bottom:10px">
+                <h:form>
+                    <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+
+                    <div class="ui-g-12" style="padding-top:35px;">
+                        <div class="ui-g-2">
+
+                        </div>
+                        <div class="ui-g-3">
+                            <h:outputLabel for="nursery_name" value="Nursery Name: " />
+                        </div>
+                        <div class="ui-g-5">
+                            <p:inputText id='nursery_name' placeholder="Nursery Name" value="#{farmerController.nursery_name}" style="width:90%" required="true" requiredMessage="Nursery name is required."/>
+                        </div>
+                        <div class="ui-g-2">
+
+                        </div>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <div class="ui-g-2">
+
+                        </div>
+                        <div class="ui-g-3">
+                            <h:outputLabel for="nursery_location" value="Nursery Address: " />
+                        </div>
+                        <div class="ui-g-5">
+                            <p:inputText id='nursery_location' placeholder="Nursery Address" value="#{farmerController.nursery_location}" style="width:90%" required="true" requiredMessage="Nursery location is required."/>
+                        </div>
+                        <div class="ui-g-2">
+
+                        </div>
+
+
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <div class="ui-g-2">
+
+                        </div>
+                        <div class="ui-g-3">
+                            <h:outputLabel for="nursery_length" value="Length: " />
+                        </div>
+                        <div class="ui-g-5">
+                            <p:inputNumber id='nursery_length' placeholder="1" value="#{farmerController.nursery_length}" style="width:90%" decimalPlaces="0" required="true" requiredMessage="Nursery length is required."/>
+                        </div>
+                        <div class="ui-g-2">
+
+                        </div>
+
+
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px; padding-bottom: 10px;">
+                        <div class="ui-g-2">
+
+                        </div>
+                        <div class="ui-g-3">
+                           <h:outputLabel for="nursery_width" value="Width: " />
+                        </div>
+                        <div class="ui-g-5">
+                            <p:inputNumber id='nursery_width' placeholder="1" value="#{farmerController.nursery_width}" style="width:90%" decimalPlaces="0" required="true" requiredMessage="Nursery width is required."/>
+                        </div>
+                        <div class="ui-g-2">
+
+                        </div>
+                        
+                        
+                    </div>
+                    <p:commandButton id="loginButton" value="Submit" update="nursery_name nursery_location nursery_length nursery_width" action="#{farmerController.add_nursery(user.username)}"></p:commandButton>
+                </h:form>
+            </p:panel>
+
+
+            <div class="ui-g-12 footer-login">
+                <span>Farm&amp;More</span><br/>
+                <span>All rights reserved.</span>
+            </div>
+        </div>
+
+        <style type="text/css">
+            html {height: 100%;}
+            .ui-button-text, .ui-button-text-only .ui-button-text{padding:8px !important; transition:none !important;}
+            .ui-panel .ui-panel-title {font-size: 17px;}
+        </style>
+
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="icarus-layout" />
+    </h:body>
+
+</html>

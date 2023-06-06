@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Farm&amp;More</title>
+        <link rel="shortcut icon" href="#{resource['icarus-layout/images/fam_logo_small.png']}"  />
+        <script src="https://www.google.com/recaptcha/api.js"></script>
+    </h:head>
+
+    <h:body styleClass="containerLogin">
+        <div class="logo-container">
+            <h:graphicImage name="images/farm_and_more_logo.jpg" id="PageLogo" library="icarus-layout"/>
+        </div>
+        <div >
+            <p:panel header="Registration" styleClass="panel-login" style="margin-bottom:10px" >
+                <h:form id="grid">
+
+                    <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+
+                    <div class="ui-g-12" style="padding-top:35px;">
+                        <p:inputText id='fullName' placeholder="Full Name" value="#{registerController.full_name}" style="width:60%" required="true" requiredMessage="Full name is required."/>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:inputText id='shortName' placeholder="Short Name" value="#{registerController.short_name}" style="width:60%" required="true" requiredMessage="Short name is required."/>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:password id='pass1' placeholder="Password 1" value="#{registerController.password}" promptLabel="Password should contain atleast 7 characters, 1 uppercase letter, 1 digit and 1 special character and must start with a letter." match="pass2" validatorMessage="Password 1 should match password 2." style="width:60%" feedback="true"  required="true" requiredMessage="Password is required." alt="first name"/>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:password  id= 'pass2' placeholder="Password 2" value="#{registerController.confirmPassword}" style="width:60%" required="true" requiredMessage="You must confirm the password."/>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px; " >
+                        <p:outputLabel for='button' value="Date of Founding" style="color: #8e8e8e; margin-right: 20px;"/>
+                        <p:calendar id='button'   navigator='true' pattern='dd/MM/yyyy' value="#{registerController.date_of_founding}"  yearRange="c-100:c+0" showOn="button" required="true" requiredMessage="Date of founding is required." />
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:inputText id='placeOfTheCompany' placeholder="Company Address" value="#{registerController.place_of_the_company}" style="width:60%" required="true" requiredMessage="Place of the company is required." />
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:inputText id='email' value="#{registerController.email}" placeholder="E-mail" style="width:60%" required="true" requiredMessage="E-mail is required." />
+                    </div>
+
+                    <div  class="ui-g-12 centerText" style="padding-top:10px; text-align: center; width: 100%; height:100%;">
+                        <div id="robot" data-theme="dark" class="g-recaptcha" style="display: inline-block;" data-sitekey="6LdtM_EUAAAAALRRPObZhfaGPYEv8bh7-zy4pFPJ" >
+
+                        </div>
+                    </div>
+
+
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-8 ">
+
+                    </div>
+                    <div class="ui-g-2"></div>                        
+
+
+                    <p:commandButton  id="loginButton" oncomplete="onSubmit()" value="Register as Company" update="fullName shortName pass1 pass2 button placeOfTheCompany email" action="#{registerController.register_company}" >
+
+                    </p:commandButton>
+                </h:form>
+                
+            </p:panel>
+
+
+            <div class="ui-g-12 footer-login">
+                <span>Farm&amp;More</span><br/>
+                <span>All rights reserved.</span>
+            </div>
+        </div>
+
+        <style type="text/css">
+            html {height: 100%;}
+            .ui-button-text, .ui-button-text-only .ui-button-text{padding:8px !important; transition:none !important;}
+            .ui-panel .ui-panel-title {font-size: 17px;}
+        </style>
+
+        <script>
+
+            function onSubmit() { //alert('hej');   // The function returns the product of p1 and p2
+                grecaptcha.reset();
+            }
+
+
+
+        </script>
+
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="icarus-layout" />
+    </h:body>
+
+</html>

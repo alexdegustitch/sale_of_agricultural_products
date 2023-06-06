@@ -1,0 +1,35 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <div id="top-bar-wrapper">
+        <div id="top-bar">
+            <div class="search-bar">
+                <span class="search">
+
+                </span>
+
+            </div>
+
+            <div class="top-bar-profile">
+                <div class="profile-name">
+                    <span>#{managerBean.company_name}</span><br/>
+                    Company
+                </div>
+                <a href="#" id="profile-image">
+                    <h:graphicImage name="images/company_profile_icon.png" library="icarus-layout" style="border: 0 none;"/>
+                </a>
+
+            </div>
+
+            <div class="top-menu">
+              
+            </div>
+        </div>
+    </div>
+
+
+</ui:composition>

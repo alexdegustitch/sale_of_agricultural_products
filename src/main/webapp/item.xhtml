@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_farmer.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="id" value="#{shopController.item_id}" >
+
+            </f:viewParam>
+            <f:event type="preRenderView" listener="#{shopController.get_item}" />
+        </f:metadata>
+        <style type="text/css">
+
+            .ui-panelgrid .ui-widget .ui-noborder{
+                margin-top: 30px;
+            }
+
+            .ui-outputpanel .ui-widget .card .centerText{
+                padding: 15px !important;
+            }
+        </style>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-2">
+
+                </div>
+                <div class="ui-g-8">
+                    <div class="card centerText">
+                        <div class="ui-g">
+                            <div class='ui-g-12'>
+                                <h:form>
+                                    <div class='ui-g-12 ui-md-6 ui-lg-6'>
+                                        <p:outputPanel style="display: block;">
+                                            <h1 class="lightBlack" style="font-size: 20px; font-weight: bold;">#{shopController.current_item.name}</h1>
+                                            <h:graphicImage name="images/items/item_#{shopController.current_item.id_item}.jpg" library="icarus-layout" width="250px" height="250px"/>
+                                        </p:outputPanel>
+                                    </div>
+                                    <div class='ui-g-12 ui-md-6 ui-lg-6'>
+                                        <p:outputPanel style="display: block;">
+                                            <p:panelGrid  styleClass="ui-noborder" style="margin-top:50px;">
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-bottom: 5px; font-weight: bolder;" >
+                                                        <h:outputText value="Company: " />
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-bottom: 5px;" >
+                                                        <h:outputText value="#{shopController.current_item.company_full_name}" />
+                                                    </p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 5px; padding-bottom: 5px; font-weight: bolder;" >
+                                                        <h:outputText value="Days to ripen: " rendered="#{shopController.current_item.type == 'S'}"/>
+                                                        <h:outputText value="Accelerating growth in days: " rendered="#{shopController.current_item.type == 'A'}"/>
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 5px; padding-bottom: 5px;" >
+                                                        <h:outputText value="#{shopController.current_item.days}" />
+                                                    </p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column colspan="2" style=" padding-top: 5px; padding-bottom: 5px;">
+
+                                                        "#{shopController.current_item.description}"
+
+                                                    </p:column>
+
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="text-align: right; padding-top: 10px; padding-bottom: 10px;" >
+                                                        <p:rating id="not_ordered" value="#{shopController.mark}" cancel="false" rendered="#{shopController.current_mark==null}" readonly="#{not shopController.ordered}">
+                                                            <p:ajax event="rate" listener="#{shopController.update_mark}" update="@form" />                                                         
+                                                        </p:rating>
+                                                        <p:tooltip for='not_ordered' value="You can vote only for the product you have ordered" position="right top" rendered="#{not shopController.ordered}"></p:tooltip>
+                                                        <p:rating id="already_voted" value="#{shopController.current_mark.mark}" readonly="true" rendered="#{shopController.current_mark!=null}"/>
+                                                        <p:tooltip for='already_voted' value="You have already voted for this product" position="right bottom"></p:tooltip>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 10px; padding-bottom: 10px; font-weight: bolder;" >
+                                                        <p:outputLabel rendered="#{shopController.current_item.mark == 0}" value="This product hasn't been reviewed yet"></p:outputLabel>
+                                                        <p:outputLabel rendered="#{shopController.current_item.mark > 0}" value="Average mark: #{shopController.current_item.mark}"></p:outputLabel>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column colspan="2" style=" padding-top: 5px; padding-bottom: 10px; text-align: center; font-size: 30px; font-weight: bold;">
+
+                                                        Price #{shopController.current_item.price} RSD
+
+                                                    </p:column>
+
+                                                </p:row>
+
+                                            </p:panelGrid>
+                                        </p:outputPanel>
+
+                                        <p:outputPanel style="display: block;">
+                                            <p:panelGrid  styleClass="ui-noborder" style="margin-top:10px; width: 100%;">
+
+                                                <f:facet name="header">
+                                                    <p:row>
+                                                        <p:column colspan="2" >
+                                                            <p:outputLabel value="In Stock" rendered="#{shopController.current_item.amount > 0}" style="color: green; font-size: 20px;"></p:outputLabel>
+                                                            <p:outputLabel value="Out of Stock" rendered="#{shopController.current_item.amount == 0}" style="color: red; font-size: 20px;"></p:outputLabel>
+                                                        </p:column>
+                                                    </p:row>
+                                                </f:facet>
+                                                <p:row >
+                                                    <p:column style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
+
+                                                        Quantity: 
+                                                        <p:spinner onkeypress="return false" id="ajaxSpinner" value="#{shopController.quantity_order}" size="3" min='1' max='#{shopController.current_item.amount}' disabled="#{shopController.current_item.amount==0}">
+                                                            <p:ajax process="@this" />
+                                                        </p:spinner>
+
+                                                    </p:column>
+                                                    <p:column style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+
+                                                        <p:commandButton disabled="#{shopController.current_item.amount==0}" value='Add To Cart'>
+                                                            <p:ajax event="click" update="@form" listener="#{shopController.add_to_cart}"></p:ajax>
+                                                        </p:commandButton>
+
+                                                    </p:column>
+
+                                                </p:row>
+                                            </p:panelGrid>
+                                        </p:outputPanel>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <h:form id='form2'>
+
+
+                        <div class='ui-g'>
+
+                            <p:outputPanel id='panel2' styleClass='card centerText' style="display: block;" class='ui-g-12' rendered="#{shopController.user_comment == null}">
+
+                                <div class='ui-g-4' rendered="#{shopController.user_comment == null}">
+
+                                </div>
+                                <div class='ui-g-4'>
+                                    <p:inputTextarea rows="6" style="width: 100%;" placeholder="Leave a comment..." value="#{shopController.comment_text}" rendered="#{shopController.ordered}">
+                                        <p:ajax event="keyup" update=":form2:panel" ></p:ajax>
+                                    </p:inputTextarea>
+                                    <p:inputTextarea id="comment_ordered" rows="6" style="width: 100%;" placeholder="Leave a comment..."  disabled="true" rendered="#{not shopController.ordered}">
+
+                                    </p:inputTextarea>
+                                    <p:tooltip position="right" for="comment_ordered" value="You can only review products you have already ordered" ></p:tooltip>
+                                </div>
+                                <div class='ui-g-4' style="position: relative;" >
+                                    <p:outputPanel id='panel'>
+                                        <p:commandButton value="Submit" style="position: relative;
+                                                         top: 85px;
+                                                         left: 20px;" disabled="true" rendered="#{shopController.comment_text.length() le 2 }"></p:commandButton>
+                                        <p:commandButton value="Submit" style="position: relative;
+                                                         top: 85px;
+                                                         left: 20px;" rendered="#{shopController.comment_text.length() gt 2}">
+                                            <p:ajax update="@form" event='click' process="@this" listener="#{shopController.add_comment}"></p:ajax>
+                                        </p:commandButton>
+                                    </p:outputPanel>
+
+                                </div>
+                            </p:outputPanel>
+
+                        </div>
+                    </h:form>
+                    <div class='ui-g'>
+                        <div class='ui-g-12'>
+                            <p:outputLabel value='Comments:' style="font-weight: bold; font-size: 30px;"></p:outputLabel>
+                        </div>
+                    </div>
+                    <h:form id="form3">
+                        <p:autoUpdate></p:autoUpdate>
+                        <div class='ui-g'>
+                            <p:outputPanel styleClass='card centerText' style="display: block;" class='ui-g-12' >
+                                <p:autoUpdate></p:autoUpdate>
+                                <p:dataTable var="comment" value="#{shopController.comments}" rows="5"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} comments" styleClass="ui-noborder" paginatorPosition="bottom" rendered="#{shopController.comments.size() > 0}">
+                                    <p:column style="padding-top: 10px; padding-bottom: 10px;">
+                                        <p:panel id="basic"  style="margin-bottom:20px">
+                                            <p:panelGrid columns="1" styleClass="ui-noborder">
+                                                <h:outputText
+                                                    value="#{comment.comment}" />
+                                            </p:panelGrid>
+                                            <f:facet name="header">
+                                                <p:outputLabel value="#{comment.farmer_username} (me)" rendered="#{comment.farmer_username == user.username}"></p:outputLabel>
+                                                <p:outputLabel value="#{comment.farmer_username}" rendered="#{comment.farmer_username != user.username and comment.deleted == 0}"></p:outputLabel>
+                                                <p:outputLabel value="user_deleted" rendered="#{comment.farmer_username != user.username and comment.deleted == 1}"></p:outputLabel>
+                                            </f:facet>
+                                            <f:facet name="footer">
+                                                <p:rating value="#{comment.mark}" readonly="true" style="display: inline;"/>
+                                                <p:outputLabel value="#{comment.date_of_comment.dayOfMonth}-#{comment.date_of_comment.monthValue}-#{comment.date_of_comment.year}" style="text-align: right; display: inline;  float: right;"/>
+                                            </f:facet>
+                                        </p:panel>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:outputPanel>
+                            <p:outputPanel styleClass="card centerText" rendered="#{shopController.comments.size() == 0}">
+
+                                <p:outputLabel  style="font-weight: bold; font-size: 30px;" >
+                                    No comments yet
+                                </p:outputLabel>
+                            </p:outputPanel>
+                        </div>
+                    </h:form>
+                </div>
+
+                <div class="ui-g-2">
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

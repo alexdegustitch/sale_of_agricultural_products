@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template_farmer.xhtml">
+    <h:outputStylesheet library="webjars" name="font-awesome/5.13.0/css/all-jsf.css" />
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{nurseryController.get_items_for_storage}"></f:event>   
+        </f:metadata>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+            .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                display: none;
+            }
+
+            .ui-widget-header{
+                background: white !important;
+            }
+
+            .ui-dialog-title{
+                color: #4a4a4a !important;
+                text-align: center !important;
+                font-size: 20px;
+            }
+
+            .ui-dialog-titlebar .ui-widget-header .ui-helper-clearfix .ui-corner-top .ui-draggable-handle{
+                text-align: center !important;
+            }
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card centerText"  >
+                    <h1 class="lightBlack">#{user_nursery.name} - Warehouse <i class="fas fa-seedling"></i> </h1>
+
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h:form id="form">
+                                <p:outputPanel layout="block" id="datatable_overlay">
+
+
+                                    <p:dataTable id="datatable" var="item" value="#{nurseryController.items_in_storage}" widgetVar="storageTable" multiViewState="false"
+                                                 scrollable="true" scrollHeight="400" reflow="true"
+                                                 selectionMode="single" selection="#{nurseryController.selected_item}" rowKey="#{item.id_item}"
+                                                 emptyMessage="No products found with given criteria" filteredValue="#{nurseryController.filtered_items}" rendered="#{nurseryController.items_in_storage.size()>0}">
+
+                                        <f:facet name="header">
+                                            <p:outputPanel>
+                                                <h:outputText value="Search all fields: " />
+                                                <p:inputText id="globalFilter" onkeyup="PF('storageTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                            </p:outputPanel>
+                                        </f:facet>
+
+                                        <p:ajax event="rowSelect" update=":form:itemDetail" oncomplete="PF('storageDialog').show()" />
+
+                                        <p:column headerText="Product Name" filterBy="#{item.name}" sortBy="#{item.name}" filterMatchMode="startsWith">
+                                            <h:outputText value="#{item.name}" />
+                                        </p:column>
+
+                                        <p:column headerText="Company Name" filterBy="#{item.company_name}" sortBy="#{item.company_name}" filterMatchMode="startsWith">
+                                            <h:outputText value="#{item.company_name}" />
+                                        </p:column>
+
+                                        <p:column headerText="Quantity in Warehouse" filterBy="#{item.amount_in_storage}" sortBy="#{item.amount_in_storage}" filterMatchMode="startsWith">
+                                            <h:outputText value="#{item.amount_in_storage}" />
+                                        </p:column>
+
+                                        <p:column headerText="Type" filterBy="#{item.type}" sortBy="#{item.type}" filterMatchMode="startsWith">
+                                            <f:facet name="filter">
+                                                <p:selectOneMenu onchange="PF('storageTable').filter()" style="width:100%; box-sizing: border-box;" >
+                                                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="Seedling" itemValue="S" />
+                                                    <f:selectItem itemLabel="Agent" itemValue="A" />
+                                                </p:selectOneMenu>
+                                            </f:facet>
+                                            <h:outputText value="Seedling" rendered="#{item.type == 'S'}"/>
+                                            <h:outputText value="Agent" rendered="#{item.type == 'A'}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{item.status}" sortBy="#{item.status}" filterMatchMode="startsWith">
+                                            <f:facet name="filter">
+                                                <p:selectOneMenu onchange="PF('storageTable').filter()" style="width:100%; box-sizing: border-box;" >
+                                                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="In Warehouse" itemValue="A" />
+                                                    <f:selectItem itemLabel="Sent" itemValue="S" />
+                                                    <f:selectItem itemLabel="Ordered" itemValue="O" />
+                                                    <f:selectItem itemLabel="Gift" itemValue="G" />
+                                                </p:selectOneMenu>
+                                            </f:facet>
+
+                                            <h:outputText value='GIFT' rendered="#{item.status == 'G'}"></h:outputText>
+                                            <p:commandButton value="Cancel order" rendered="#{item.status == 'O' or item.status == 'W'}" >
+                                                <p:ajax event="click" update='@form' listener="#{nurseryController.cancel_order(item.item_order_id)}"></p:ajax>
+                                            </p:commandButton>
+                                        </p:column>
+
+
+
+                                    </p:dataTable>
+
+                                    <br />
+
+
+                                    <p:dialog header="Product Info" widgetVar="storageDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" my="center">
+                                        <p:outputPanel id="itemDetail" style="text-align:center;">
+                                            <p:panelGrid  columns="2" rendered="#{not empty nurseryController.selected_item}" columnClasses="label,value" style="font-weight: bolder; border: none;" styleClass="ui-noborder">
+                                                <f:facet name="header">
+                                                    <h:graphicImage name="images/items/item_#{nurseryController.selected_item.id_item}.jpg" library="icarus-layout" height="300px" width="300px"/>
+                                                </f:facet>
+
+                                                <h:outputText value="Name:" />
+                                                <h:outputText value="#{nurseryController.selected_item.name}" />
+
+                                                <h:outputText value="Company name:" />
+                                                <h:outputText value="#{nurseryController.selected_item.company_name}" />
+
+                                                <h:outputText value="Price:" />
+                                                <h:outputText value="#{nurseryController.selected_item.price}" />
+
+                                                <h:outputText value="Type:" />
+                                                <h:outputText value="Seedling" rendered="#{nurseryController.selected_item.type == 'S'}"/>
+                                                <h:outputText value="Agent" rendered="#{nurseryController.selected_item.type == 'A'}"/>
+                                            </p:panelGrid>
+                                        </p:outputPanel>
+                                    </p:dialog>
+
+
+                                </p:outputPanel>
+                            </h:form>
+                        </div>
+
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h:form id='form2'>
+                                <p:autoUpdate/>
+                                <p:outputLabel id="output_label" rendered="#{nurseryController.items_in_storage.size()==0}"><h2>You don't have any products in warehouse!</h2></p:outputLabel>
+                            </h:form>
+
+                        </div>
+
+                    </div>
+
+                    <h:form>
+
+                    </h:form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>
